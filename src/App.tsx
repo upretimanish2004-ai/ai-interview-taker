@@ -22,6 +22,7 @@ const App: React.FC = () => {
     setError(null);
 
     try {
+      // Reverted to ensure compatibility with Vercel's environment variable handling.
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const systemInstruction = getSystemPrompt(interviewType);
 
