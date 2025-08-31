@@ -2,7 +2,7 @@
 .env
 .env.local
 .env.*.local
-
+src/.env.local
 
 # Logs
 logs

@@ -7,7 +7,6 @@ import { useSpeechToText } from './hooks/useSpeechToText';
 import { ChatMessage, InterviewState } from './types';
 import { INITIAL_SYSTEM_PROMPT } from './constants';
 
-
 const App: React.FC = () => {
   const [interviewState, setInterviewState] = useState<InterviewState>(InterviewState.SETUP);
   const [resumeText, setResumeText] = useState<string | null>(null);
@@ -25,14 +24,7 @@ const App: React.FC = () => {
     setError(null);
 
     try {
-      // NOTE: In a production application, API keys should be handled securely
-      // and not hardcoded. This is for demonstration purposes based on user request.
-      const apiKey = import.meta.env.GEMINI_API_KEY;
-      if (!apiKey) {
-        throw new Error("API key is missing.");
-      }
-      
-      const ai = new GoogleGenAI({ apiKey });
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const chat = ai.chats.create({
         model: 'gemini-2.5-flash',
         config: {

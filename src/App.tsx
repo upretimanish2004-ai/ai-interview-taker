@@ -22,14 +22,7 @@ const App: React.FC = () => {
     setError(null);
 
     try {
-      // NOTE: In a production application, API keys should be handled securely
-      // and not hardcoded.
-      const apiKey = "AIzaSyD4PTMxPno0sonNuJztc2gaq9cYGz6pxIA";
-      if (!apiKey) {
-        throw new Error("API key is missing.");
-      }
-      
-      const ai = new GoogleGenAI({ apiKey });
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const systemInstruction = getSystemPrompt(interviewType);
 
       const chat = ai.chats.create({
