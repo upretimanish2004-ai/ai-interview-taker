@@ -1,0 +1,8 @@
+
+{
+  "name": "AI Tech Interviewer",
+  "description": "A voice-based AI interviewer for technical roles. Upload your resume to get started with a personalized interview experience powered by Gemini.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
