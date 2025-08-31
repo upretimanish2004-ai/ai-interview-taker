@@ -74,9 +74,10 @@ export const InterviewScreen: React.FC<InterviewScreenProps> = ({
 
       <footer className="bg-gray-800/80 backdrop-blur-sm p-4 sticky bottom-0 z-10 border-t border-gray-700">
         <div className="max-w-4xl mx-auto flex flex-col items-center gap-4">
-          <div className="h-6 text-center text-gray-400 italic">
+          <div className="h-6 w-full max-w-2xl text-center text-gray-400 italic truncate px-4">
             {isListening && (transcript ? transcript : 'Listening...')}
             {isSpeaking && !isListening && 'AI is speaking...'}
+            {!isListening && !isSpeaking && <span>&nbsp;</span>}
           </div>
           <button
             onClick={onToggleListening}
@@ -88,8 +89,7 @@ export const InterviewScreen: React.FC<InterviewScreenProps> = ({
                 : 'bg-blue-600 hover:bg-blue-700'
             }`}
           >
-            {isListening && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>}
-            <MicrophoneIcon className="w-8 h-8 text-white" />
+            <MicrophoneIcon className={`w-8 h-8 text-white ${isListening ? 'animate-pulse' : ''}`} />
           </button>
         </div>
       </footer>
