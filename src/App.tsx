@@ -23,15 +23,21 @@ const App: React.FC = () => {
 
     try {
       // Reverted to ensure compatibility with Vercel's environment variable handling.
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      const systemInstruction = getSystemPrompt(interviewType);
+       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
-      const chat = ai.chats.create({
-        model: 'gemini-2.5-flash',
-        config: {
-          systemInstruction,
+        if (!apiKey) {
+          throw new Error("API key is missing.");
         }
-      });
+        
+        const ai = new GoogleGenAI({ apiKey });
+        const systemInstruction = getSystemPrompt(interviewType);
+
+        const chat = ai.chats.create({
+          model: 'gemini-2.5-flash',
+          config: {
+            systemInstruction,
+          }
+        });
       chatRef.current = chat;
 
       const firstPrompt = `Here is the candidate's resume. Please review it and then start the interview by introducing yourself and asking the first question based on the interview type. Resume:\n\n${resumeText}`;
