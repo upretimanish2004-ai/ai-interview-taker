@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { SetupScreen } from './components/SetupScreen';
 import { InterviewScreen } from './components/InterviewScreen';
@@ -24,6 +25,7 @@ const App: React.FC = () => {
     setError(null);
 
     try {
+      // Fix: Use `process.env.API_KEY` to align with coding guidelines and resolve TypeScript error.
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
       if (!apiKey) {

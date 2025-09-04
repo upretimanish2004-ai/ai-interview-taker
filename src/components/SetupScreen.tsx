@@ -1,19 +1,20 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Spinner } from './Spinner';
-import { UploadIcon } from './IconComponents';
-import { InterviewType, INTERVIEW_TYPES } from '../types';
+import { UploadIcon, InterviewIllustrationIcon } from './IconComponents';
+import { InterviewType, INTERVIEW_TYPES, InterviewDuration, INTERVIEW_DURATIONS } from '../types';
 
 // Let TypeScript know that pdfjsLib will be available on the window object
 declare const pdfjsLib: any;
 
 interface SetupScreenProps {
-  onStart: (resumeText: string, interviewType: InterviewType) => void;
+  onStart: (resumeText: string, interviewType: InterviewType, duration: InterviewDuration) => void;
   isLoading: boolean;
   error: string | null;
 }
 
 export const SetupScreen: React.FC<SetupScreenProps> = ({ onStart, isLoading, error }) => {
   const [selectedType, setSelectedType] = useState<InterviewType | null>(null);
+  const [selectedDuration, setSelectedDuration] = useState<InterviewDuration | null>(null);
   const [resumeText, setResumeText] = useState('');
   const [fileName, setFileName] = useState('');
   const [fileError, setFileError] = useState('');
@@ -85,19 +86,22 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({ onStart, isLoading, er
   }, []);
 
   const handleStartClick = () => {
-    if (resumeText.trim() && selectedType) {
-      onStart(resumeText, selectedType);
-    } else if (!selectedType) {
+    if (!selectedType) {
         setFileError('Please select an interview type.');
+    } else if (!selectedDuration) {
+        setFileError('Please select an interview duration.');
+    } else if (!resumeText.trim()) {
+        setFileError('Please upload your resume to start.');
     } else {
-      setFileError('Please upload your resume to start.');
+      onStart(resumeText, selectedType, selectedDuration);
     }
   };
 
   return (
     <div className="flex-grow flex items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-3xl bg-gray-800 rounded-2xl shadow-2xl p-8 space-y-8 border border-gray-700">
-        <div className="text-center space-y-2">
+        <div className="text-center space-y-4">
+          <InterviewIllustrationIcon className="mx-auto h-24 w-24 text-blue-400" />
           <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-300">
             AI Tech Interviewer
           </h1>
@@ -118,7 +122,7 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({ onStart, isLoading, er
                   onClick={() => setSelectedType(type.id)}
                   className={`p-4 rounded-lg text-left transition-all duration-200 border-2 ${
                     selectedType === type.id
-                      ? 'bg-blue-900/50 border-blue-500'
+                      ? 'bg-blue-900/50 border-blue-500 ring-2 ring-blue-500'
                       : 'bg-gray-700/50 border-gray-600 hover:border-blue-600'
                   }`}
                   disabled={isLoading || isParsing}
@@ -129,9 +133,29 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({ onStart, isLoading, er
               ))}
             </div>
           </div>
+          
+          <div>
+            <h2 className="text-lg font-semibold text-gray-200 mb-3">2. Select Duration</h2>
+            <div className="grid grid-cols-3 gap-4">
+                {INTERVIEW_DURATIONS.map(duration => (
+                    <button
+                        key={duration.id}
+                        onClick={() => setSelectedDuration(duration.id)}
+                        className={`p-4 rounded-lg text-center transition-all duration-200 border-2 ${
+                            selectedDuration === duration.id
+                            ? 'bg-blue-900/50 border-blue-500 ring-2 ring-blue-500'
+                            : 'bg-gray-700/50 border-gray-600 hover:border-blue-600'
+                        }`}
+                        disabled={isLoading || isParsing}
+                    >
+                        <h3 className="font-bold text-white">{duration.title}</h3>
+                    </button>
+                ))}
+            </div>
+          </div>
 
           <div>
-            <h2 className="text-lg font-semibold text-gray-200 mb-3">2. Upload Resume</h2>
+            <h2 className="text-lg font-semibold text-gray-200 mb-3">3. Upload Resume</h2>
             <label 
               htmlFor="resume-upload" 
               className="relative block w-full border-2 border-dashed border-gray-600 rounded-lg p-10 text-center cursor-pointer hover:border-blue-400 transition-colors duration-300 bg-gray-900/50"
@@ -164,7 +188,7 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({ onStart, isLoading, er
           
           <button
             onClick={handleStartClick}
-            disabled={!resumeText || !selectedType || isLoading || isParsing}
+            disabled={!resumeText || !selectedType || !selectedDuration || isLoading || isParsing}
             className="w-full flex items-center justify-center gap-3 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-all duration-300 text-lg"
           >
             {isLoading ? (

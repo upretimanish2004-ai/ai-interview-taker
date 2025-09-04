@@ -10,6 +10,7 @@ export enum InterviewState {
 }
 
 export type InterviewType = 'standard' | 'behavioral' | 'resume' | 'system-design';
+export type InterviewDuration = 30 | 45 | 60;
 
 export const INTERVIEW_TYPES: { id: InterviewType; title: string; description: string }[] = [
   {
@@ -32,4 +33,10 @@ export const INTERVIEW_TYPES: { id: InterviewType; title: string; description: s
     title: 'System Design',
     description: 'A focused session on designing scalable, distributed systems for real-world problems.',
   },
+];
+
+export const INTERVIEW_DURATIONS: { id: InterviewDuration; title: string }[] = [
+    { id: 30, title: '30 min' },
+    { id: 45, title: '45 min' },
+    { id: 60, title: '60 min' },
 ];
